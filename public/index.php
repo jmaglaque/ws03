@@ -1,30 +1,31 @@
 <?php
 
 require '../helpers.php';
+require basePath('Database.php');
+$config = require basePath('config/db.php');
 
-$routes = [
-    '/' => 'controller/home.php',
-    '/listing' => 'controller/listings/index.php',
-    '/listings/create' => 'controller/listings/create.php',
-    '404' => 'controller/error/404.php'
-];
+$db = new Database($config);
+require basePath('Router.php');
 
-// Get the requested URI without the query string
+$router = new Router();
+
+$routes = require basePath('routes.php');
+$uri = $_SERVER['REQUEST_URI'];
+$method = $_SERVER['REQUEST_METHOD'];
+
+
+$routes = 
+
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// For XAMPP subdirectory compatibility (e.g., localhost/WS03/public/)
-$basePath = dirname($_SERVER['SCRIPT_NAME']);
-if (strpos($uri, $basePath) === 0) {
-    $uri = substr($uri, strlen($basePath));
-}
-
-// Default to '/' if empty
-if ($uri === '' || $uri === '/index.php') {
-    $uri = '/';
+// Strip trailing slashes, but keep /
+if ($uri !== '/' && strlen($uri) > 1) {
+    $uri = rtrim($uri, '/');
 }
 
 if (array_key_exists($uri, $routes)) {
-    require basePath($routes[$uri]);
+    require(basePath($routes[$uri]));
 } else {
+    http_response_code(404);
     require basePath($routes['404']);
 }
