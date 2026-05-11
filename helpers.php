@@ -72,3 +72,8 @@ function inspectAndDie($value)
     die(var_dump($value));
     echo '</pre>';
 }
+
+function formatSalary($salary)
+{
+    return '$' . number_format(floatval($salary));
+}
