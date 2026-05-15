@@ -93,3 +93,15 @@ function sanitize($dirty)
         FILTER_SANITIZE_SPECIAL_CHARS
     );
 }
+
+/**
+ * Redirect ot a given url
+ * 
+ * @param string $url
+ * 
+ * @return void
+ */
+function redirect($url)
+{
+    header("Location: {$url}");
+}
